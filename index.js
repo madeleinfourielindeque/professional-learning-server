@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-const API_KEY = "my-secret-key";
+const API_KEY = "rnd_ACreoJhF9o7Qr2xlBFSenCLCCyqj";
 
 app.use(express.json());
 
