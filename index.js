@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const API_KEY = "rnd_ACreoJhF9o7Qr2xlBFSenCLCCyqj";
+const API_KEY = process.env.API_KEY;
 
 app.use(express.json());
 
@@ -27,4 +27,5 @@ app.get('/api/resources', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+    
 });
