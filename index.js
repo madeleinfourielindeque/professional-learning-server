@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
 
-// Optional: simple CORS so Rise can call your API
+// Allow Rise / browser access (CORS)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-api-key");
@@ -15,17 +16,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Public route
+// Home route
 app.get("/", (req, res) => {
   res.json({ message: "Professional Learning API is running" });
 });
 
-// Existing protected route
+// Optional protected resources route
 app.get("/api/resources", (req, res) => {
   const key = req.headers["x-api-key"];
   const API_KEY = process.env.API_KEY;
 
-  if (key !== API_KEY) {
+  if (API_KEY && key !== API_KEY) {
     return res.status(403).json({ error: "Invalid API key" });
   }
 
@@ -35,7 +36,7 @@ app.get("/api/resources", (req, res) => {
   ]);
 });
 
-// New route for the Rise Socratic guide
+// Socratic Dyslexia endpoint for Rise
 app.post("/api/socratic-dyslexia", (req, res) => {
   try {
     const { messages } = req.body;
@@ -58,6 +59,7 @@ app.post("/api/socratic-dyslexia", (req, res) => {
   }
 });
 
+// Socratic response logic
 function generateSocraticReply(input, userMessages) {
   const text = (input || "").toLowerCase().trim();
   const turn = userMessages.length;
@@ -78,8 +80,7 @@ function generateSocraticReply(input, userMessages) {
   if (
     text.includes("backwards") ||
     text.includes("letters backwards") ||
-    text.includes("revers") ||
-    text.includes("mirror")
+    text.includes("revers")
   ) {
     return "You’re noticing something many people associate with dyslexia. What if letter reversals were only one visible behaviour rather than the core difficulty — what language-processing challenges might sit underneath the reading struggle?";
   }
@@ -96,7 +97,6 @@ function generateSocraticReply(input, userMessages) {
   if (
     text.includes("fluency") ||
     text.includes("slow reading") ||
-    text.includes("reading slowly") ||
     text.includes("processing speed")
   ) {
     return "That’s a thoughtful observation. If reading takes far more effort and time, what might happen to the student’s working memory, stamina, and confidence during a typical classroom task?";
@@ -105,17 +105,14 @@ function generateSocraticReply(input, userMessages) {
   if (
     text.includes("spelling") ||
     text.includes("writing") ||
-    text.includes("written work") ||
-    text.includes("sentence")
+    text.includes("written work")
   ) {
     return "Absolutely — dyslexia often shows up beyond reading alone. How might spelling and writing demands increase cognitive load, even when the student understands the content quite well?";
   }
 
   if (
     text.includes("memory") ||
-    text.includes("working memory") ||
-    text.includes("forget") ||
-    text.includes("remember")
+    text.includes("working memory")
   ) {
     return "That’s a useful connection. If a learner is using a lot of mental effort just to decode words, what happens to the capacity left for remembering instructions, organising ideas, or answering questions?";
   }
@@ -140,18 +137,9 @@ function generateSocraticReply(input, userMessages) {
   if (
     text.includes("confidence") ||
     text.includes("anxiety") ||
-    text.includes("embarrass") ||
     text.includes("self-esteem")
   ) {
     return "Yes — the emotional dimension matters a great deal. If a student repeatedly experiences difficulty in visible literacy tasks, how might that shape participation, risk-taking, and their sense of themselves as a learner?";
-  }
-
-  if (
-    text.includes("science of reading") ||
-    text.includes("structured literacy") ||
-    text.includes("explicit instruction")
-  ) {
-    return "That’s a strong line of thinking. What would explicit, structured literacy look like in practice for this learner, and how would it differ from expecting them to infer patterns independently?";
   }
 
   if (turn === 1) {
@@ -173,6 +161,7 @@ function generateSocraticReply(input, userMessages) {
   return "That’s a valuable reflection. If you were to translate that insight into one concrete classroom practice this week, what would you try first, and what would you watch for in the student’s response?";
 }
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
