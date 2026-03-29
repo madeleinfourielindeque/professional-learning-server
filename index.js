@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
+const API_KEY = process.env.API_KEY;
 
 // Middleware
 app.use(express.json());
@@ -8,11 +9,16 @@ app.use(express.json());
 // Allow Rise / browser access (CORS)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-api-key");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, x-api-key"
+  );
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
+
   next();
 });
 
@@ -24,7 +30,6 @@ app.get("/", (req, res) => {
 // Optional protected resources route
 app.get("/api/resources", (req, res) => {
   const key = req.headers["x-api-key"];
-  const API_KEY = process.env.API_KEY;
 
   if (API_KEY && key !== API_KEY) {
     return res.status(403).json({ error: "Invalid API key" });
@@ -39,6 +44,12 @@ app.get("/api/resources", (req, res) => {
 // Socratic Dyslexia endpoint for Rise
 app.post("/api/socratic-dyslexia", (req, res) => {
   try {
+    const key = req.headers["x-api-key"];
+
+    if (API_KEY && key !== API_KEY) {
+      return res.status(403).json({ error: "Invalid API key" });
+    }
+
     const { messages } = req.body;
 
     if (!Array.isArray(messages)) {
