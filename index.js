@@ -33,7 +33,7 @@ app.post("/api/professional-learning-guide", (req, res) => {
       return res.status(403).json({ error: "Invalid API key" });
     }
 
-    const { topicId, messages } = req.body;
+    const { topicId, messages, interactionType } = req.body;
 
     if (!topicId) {
       return res.status(400).json({ error: "topicId is required." });
@@ -54,7 +54,12 @@ app.post("/api/professional-learning-guide", (req, res) => {
       ? userMessages[userMessages.length - 1].content
       : "";
 
-    const reply = generateProfessionalLearningReply(lastUserMessage, userMessages, pack);
+    const reply = generateProfessionalLearningReply(
+      lastUserMessage,
+      userMessages,
+      pack,
+      interactionType || "typed"
+    );
 
     res.json({ reply });
   } catch (error) {
@@ -63,12 +68,16 @@ app.post("/api/professional-learning-guide", (req, res) => {
   }
 });
 
-function generateProfessionalLearningReply(input, userMessages, pack) {
+function generateProfessionalLearningReply(input, userMessages, pack, interactionType) {
   const text = (input || "").toLowerCase().trim();
   const turn = userMessages.length;
 
   if (!text) {
     return pack.starterQuestion;
+  }
+
+  if (interactionType === "quick-prompt") {
+    return generateQuickPromptReply(text, pack);
   }
 
   if (
@@ -139,6 +148,38 @@ function generateProfessionalLearningReply(input, userMessages, pack) {
   }
 
   return `That’s a valuable insight. If you turned this into one practical next step for staff, what would you want them to do differently in practice?`;
+}
+
+function generateQuickPromptReply(text, pack) {
+  if (pack.topicId === "dyslexia") {
+    if (text.includes("misconception")) {
+      return `A common misconception is that dyslexia mainly means seeing letters backwards. In practice, dyslexia is more closely associated with difficulties in phonological processing, decoding, spelling, and reading fluency. Which misconception do you think has the biggest impact on classroom expectations or teacher responses?`;
+    }
+
+    if (text.includes("adjustment")) {
+      return `Useful classroom adjustments might include reducing unnecessary reading load, allowing alternative ways to show understanding, chunking instructions, using assistive technology, and giving extra time when literacy demands are high. The aim is to reduce barriers without lowering the cognitive challenge of the learning. Which of those adjustments feels most realistic in your context?`;
+    }
+
+    if (text.includes("reading") || text.includes("spelling") || text.includes("written expression") || text.includes("learning impacts")) {
+      return `Dyslexia can affect much more than reading aloud. Students may need more effort for decoding, spelling, and written expression, which can increase cognitive load and reduce working memory available for the task itself. How might that change the way you interpret a student’s pace, confidence, or written output?`;
+    }
+
+    if (text.includes("teacher’s role") || text.includes("role and referral") || text.includes("referred")) {
+      return `A teacher’s role includes noticing patterns, documenting classroom observations, adjusting instruction where appropriate, and referring concerns through school support processes. It does not include diagnosing dyslexia or replacing specialist assessment. What kinds of observations would be most useful to document before referral?`;
+    }
+  }
+
+  if (pack.topicId === "engagement-and-regulation") {
+    if (text.includes("misconception")) {
+      return `A common misconception is that disengagement always means laziness or defiance. In many cases, disengagement may reflect overload, uncertainty, dysregulation, stress, or a low sense of safety and success in the task. Which of those possibilities do you think staff are most likely to overlook?`;
+    }
+
+    if (text.includes("adjustment") || text.includes("support")) {
+      return `Supportive responses can include chunking tasks, reducing overload, offering achievable entry points, using calm and predictable language, and strengthening relational safety before pushing for compliance. These moves support both regulation and engagement. Which of those feels most transferable to everyday practice?`;
+    }
+  }
+
+  return `Here’s a useful starting point for ${pack.topicTitle.toLowerCase()}: ${pack.learningFocus} What part of that feels most relevant to your own setting or practice?`;
 }
 
 app.listen(PORT, () => {
