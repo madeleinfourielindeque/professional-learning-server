@@ -77,17 +77,15 @@ function generateProfessionalLearningReply(input, userMessages, pack, interactio
   const text = (input || "").toLowerCase().trim();
   const turn = userMessages.length;
 
-  // Starter
-  if (!text) {
+  if (!text && interactionType !== "finish" && interactionType !== "closing") {
     return pack.starterQuestion;
   }
 
-  // Explicit finish flow
+  // Explicit finish flow only
   if (interactionType === "finish") {
     return `Before we finish, what is one idea from this conversation that feels most important for your own practice or understanding of ${pack.topicTitle.toLowerCase()}?`;
   }
 
-  // Final closing message
   if (interactionType === "closing") {
     return "Thank you. That reflection captures an important professional insight. As you finish up this module, keep that idea in mind and consider how it might shape your practice in real situations.";
   }
@@ -97,17 +95,13 @@ function generateProfessionalLearningReply(input, userMessages, pack, interactio
     return generateQuickPromptReply(text, pack);
   }
 
-  // Automatic move toward closure after several turns
+  // Soft synthesis, but not closure
   if (turn === 5) {
     return `You’ve explored several important ideas here about ${pack.topicTitle.toLowerCase()}. What is one practical insight you are taking from this conversation so far?`;
   }
 
   if (turn === 6) {
-    return "That sounds like a meaningful takeaway. How might that insight influence something you do, notice, or change in your practice?";
-  }
-
-  if (turn >= 7) {
-    return "Thank you. That reflection captures an important professional insight. As you finish up this module, keep that idea in mind and consider how it might shape your practice in real situations.";
+    return "That sounds like a meaningful takeaway. What still feels most worth clarifying or applying in your own practice?";
   }
 
   // Topic-sensitive prompt handling
@@ -167,7 +161,7 @@ function generateProfessionalLearningReply(input, userMessages, pack, interactio
     text.includes("specialist") ||
     text.includes("learning support")
   ) {
-    return `That brings in an important professional boundary. What observations or patterns would help clarify when classroom support is enough and when referral or specialist input may be needed?`;
+    return "That brings in an important professional boundary. What observations or patterns would help clarify when classroom support is enough and when referral or specialist input may be needed?";
   }
 
   // Turn-based Socratic flow
