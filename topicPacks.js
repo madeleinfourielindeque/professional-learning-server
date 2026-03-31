@@ -126,7 +126,7 @@ const topicPacks = {
 
     resources: [
       {
-        label: "Trauma-informed practice resources",
+        label: "Trauma Aware Schools",
         url: "https://traumaawareschools.org/"
       }
     ],
@@ -213,6 +213,83 @@ const topicPacks = {
         "What is within an educator’s role, and what needs referral to wellbeing or specialist support?",
       transfer:
         "What is one thing a staff member could notice, say, or do differently after this learning?"
+    }
+  },
+
+  "engagement-and-regulation": {
+    topicId: "engagement-and-regulation",
+    topicTitle: "Engagement and Regulation",
+    audience: "Teachers, youth workers, and school support staff",
+    learningFocus:
+      "Help educators think more deeply about how engagement and regulation shape learning, participation, and classroom relationships, and how staff responses can reduce barriers to learning.",
+
+    starterQuestion:
+      "When a student appears disengaged, restless, shut down, or reactive, what might be happening for them beneath the surface of that behaviour?",
+
+    keyIdeas: [
+      "engagement is not just compliance",
+      "regulation affects readiness to learn",
+      "behaviour can communicate stress, overload, uncertainty, or disconnection",
+      "co-regulation can support student participation",
+      "predictability and relationships matter",
+      "cognitive load can reduce engagement",
+      "task design influences persistence and success",
+      "student voice and agency can strengthen engagement",
+      "repair and reconnection matter after challenge"
+    ],
+
+    commonMisconceptions: [
+      "disengagement always means laziness or defiance",
+      "a regulated student is simply a quiet student",
+      "engagement is the same as on-task compliance",
+      "students should be able to regulate themselves without adult support",
+      "if a student refuses work, the issue is only motivation",
+      "stronger consequences automatically improve engagement"
+    ],
+
+    classroomImplications: [
+      "notice whether a student is dysregulated, overloaded, confused, disconnected, or avoiding risk",
+      "use calm and predictable responses when behaviour escalates",
+      "reduce unnecessary overload through chunking, clarity, and scaffolding",
+      "build relational trust and psychological safety",
+      "offer appropriate choice and achievable entry points into learning",
+      "focus on co-regulation before demanding reflection or reasoning",
+      "design tasks that are meaningful, accessible, and appropriately challenging",
+      "repair relationships after conflict or rupture"
+    ],
+
+    boundaries: [
+      "do not assume behaviour has a single cause",
+      "do not diagnose mental health, trauma, or neurodevelopmental conditions based on classroom presentation alone",
+      "do not replace wellbeing, behaviour support, or safeguarding processes",
+      "do not treat regulation support as therapy or counselling"
+    ],
+
+    referralGuidance:
+      "If disengagement, distress, shutdown, or escalation is persistent, significant, or raises wellbeing or safety concerns, staff should document patterns and follow school support, wellbeing, and referral processes.",
+
+    resources: [
+      {
+        label: "Be You",
+        url: "https://beyou.edu.au/"
+      },
+      {
+        label: "Australian Education Research Organisation",
+        url: "https://www.edresearch.edu.au/"
+      }
+    ],
+
+    promptHints: {
+      understanding:
+        "What might be affecting this student’s readiness to participate, persist, or engage in learning?",
+      misconception:
+        "What assumption might adults make too quickly when they see disengagement or escalation?",
+      practice:
+        "What classroom response, adjustment, or design move could support both regulation and engagement here?",
+      boundaries:
+        "What is within an educator’s role in supporting this student, and what may need wider school support or referral?",
+      transfer:
+        "What is one thing a staff member could notice, change, or try this week to support engagement and regulation more effectively?"
     }
   }
 };
